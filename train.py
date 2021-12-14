@@ -3,20 +3,14 @@
 # !@author: superMC @email: 18758266469@163.com
 # !@fileName: train.py
 import argparse
-import copy
-import os
-import time
 
 import torch
-import torchvision
 from torch import nn, optim
-from torch.optim import lr_scheduler
 from torch.utils.data import DataLoader
 
-from models.actionRecNet import ActionRecNet
-from models.resnet import resnet18
 from config import train_csv_path, val_csv_path
 from dataset import MyDataset, train_transform, val_transform
+from models.actionRecNet import ActionRecNet
 from utils import train, validate, adjust_learning_rate, save_checkpoint
 
 parser = argparse.ArgumentParser(description='PyTorch ImageNet Training')
@@ -56,7 +50,6 @@ for epoch in range(epochs):
     if is_best:
         save_checkpoint({
             'epoch': epoch + 1,
-            'arch': args.arch,
             'state_dict': actionNet.state_dict(),
             'best_acc1': best_acc1,
             'optimizer': optimizer.state_dict(),
