@@ -8,6 +8,8 @@ from enum import Enum
 
 import torch
 
+from config import action_scale, person_scale, sex_scale, name_scale, RELY
+
 
 def train(train_loader, model, criterion, optimizer, epoch, args):
     batch_time = AverageMeter('Time', ':6.3f')
@@ -41,8 +43,11 @@ def train(train_loader, model, criterion, optimizer, epoch, args):
         person_loss = torch.mean(criterion(person_predict, person_target), dim=0)
         sex_loss = torch.mean(criterion(sex_predict, sex_target) * person_target, dim=0)
         name_loss = torch.mean(criterion(name_predict, name_target) * person_target, dim=0)
-        action_loss = torch.mean(criterion(action_predict, action_target) * person_target, dim=0)
-        loss = person_loss + sex_loss + name_loss + action_loss
+        if person_scale and RELY:
+            action_loss = torch.mean(criterion(action_predict, action_target) * person_target, dim=0)
+        else:
+            action_loss = torch.mean(criterion(action_predict, action_target), dim=0)
+        loss = person_scale * person_loss + sex_scale * sex_loss + name_scale * name_loss + action_scale * action_loss
         # measure accuracy and record loss
         acc1, acc5 = accuracy(action_predict, action_target, topk=(1, 5))
         losses.update(loss.item(), images.size(0))
@@ -90,8 +95,11 @@ def validate(val_loader, model, criterion, args):
             person_loss = torch.mean(criterion(person_predict, person_target), dim=0)
             sex_loss = torch.mean(criterion(sex_predict, sex_target) * person_target, dim=0)
             name_loss = torch.mean(criterion(name_predict, name_target) * person_target, dim=0)
-            action_loss = torch.mean(criterion(action_predict, action_target) * person_target, dim=0)
-            loss = 0.1 * person_loss + 0.1 * sex_loss + 0.1 * name_loss + action_loss
+            if person_scale and RELY:
+                action_loss = torch.mean(criterion(action_predict, action_target) * person_target, dim=0)
+            else:
+                action_loss = torch.mean(criterion(action_predict, action_target), dim=0)
+            loss = person_scale * person_loss + sex_scale * sex_loss + name_scale * name_loss + action_scale * action_loss
             # measure accuracy and record loss
             acc1, acc5 = accuracy(action_predict, action_target, topk=(1, 5))
             losses.update(loss.item(), images.size(0))

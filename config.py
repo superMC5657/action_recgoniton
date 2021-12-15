@@ -18,3 +18,10 @@ sex_label_dict = {"a": 0, "b": 1, "c": 0, "d": 1, "e": 1}
 name_label_dict = {"a": 0, "b": 1, "c": 2, "d": 3, "e": 4}
 person_label_dict = {"6": 0, "1": 1, "2": 1, "3": 1, "4": 1, "5": 1}
 action_label_dict = {"1": 0, "2": 1, "3": 2, "4": 3, "5": 4, "6": 5}
+
+RELY = False
+
+person_scale = 0
+sex_scale = 0
+name_scale = 0
+action_scale = 1
