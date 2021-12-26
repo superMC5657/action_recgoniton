@@ -19,8 +19,8 @@ args = parser.parse_args()
 train_dataset = MyDataset(train_csv_path, transform=train_transform)
 val_dataset = MyDataset(val_csv_path, transform=val_transform)
 
-train_loader = DataLoader(dataset=train_dataset, batch_size=16, shuffle=True)
-val_loader = DataLoader(dataset=val_dataset, batch_size=1, shuffle=True)
+train_loader = DataLoader(dataset=train_dataset, batch_size=50, shuffle=True, num_workers=4, pin_memory=True)
+val_loader = DataLoader(dataset=val_dataset, batch_size=50, shuffle=True)
 
 actionNet = ActionRecNet()
 

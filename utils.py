@@ -118,6 +118,11 @@ def validate(val_loader, model, criterion, args):
     return top1.avg
 
 
+'''
+  此处借鉴于pytorch官网
+'''
+
+
 def save_checkpoint(state, is_best, filename='checkpoint.pth.tar'):
     torch.save(state, filename)
     if is_best:
